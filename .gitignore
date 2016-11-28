@@ -1,0 +1,9 @@
+#ignore gedit file
+*~
+
+#ignore eclipse workspace
+.project
+.pydevproject
+
+#ignore runtime tepmorary file
+runtime/
