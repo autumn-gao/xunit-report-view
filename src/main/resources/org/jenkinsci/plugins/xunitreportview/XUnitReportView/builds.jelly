@@ -1,0 +1,141 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<st:once>
+		<script type="text/javascript">
+			function showBuild(id) {
+				var element = document.getElementById(id);
+				element.style.display = "";
+				document.getElementById(id + "-showlink").style.display = "none";
+				document.getElementById(id + "-hidelink").style.display = "";
+			}
+
+			function hideBuild(id) {
+				document.getElementById(id).style.display = "none";
+				document.getElementById(id + "-showlink").style.display = "";
+				document.getElementById(id + "-hidelink").style.display = "none";
+			}
+
+			function showCase(id) {
+				var element = document.getElementById(id);
+				element.style.display = "";
+				document.getElementById(id + "-showlink").style.display = "none";
+				document.getElementById(id + "-hidelink").style.display = "";
+			}
+
+			function hideCase(id) {
+				document.getElementById(id).style.display = "none";
+				document.getElementById(id + "-showlink").style.display = "";
+				document.getElementById(id + "-hidelink").style.display = "none";
+			}
+		</script>
+	</st:once>
+
+	<j:set var="builds" value="${it.getBuildList(job)}"/>
+	<table class="pane sortable bigtable stripped" id="job_tbl">
+		<tr>
+			<td class="pane-header">${%Build}</td>
+			<td class="pane-header">${%Description}</td>
+			<td class="pane-header" style="width:5em">${%Duration}</td>
+			<td class="pane-header" style="width:5em">${%Fail}</td>
+			<td class="pane-header" style="width:5em">${%Pass}</td>
+			<td class="pane-header" style="width:5em">${%Total}</td>
+			<td class="pane-header" style="width:5em">${%Delete?}</td>
+		</tr>
+		<j:forEach var="build" items="${builds}">
+			<j:set var="total_case" value="${0}"/>
+			<j:set var="fail_case" value="${0}"/>
+			<j:set var="pass_case" value="${0}"/>
+			<!--
+			<j:set var="build_xml" value="${it.getBuildXML(build)}"/>
+			-->
+			<tbody>
+				<tr>
+					<td>
+						<j:set var="open_build" value="showBuild('${build}')"/>
+						<j:set var="close_build" value="hideBuild('${build}')"/>
+						<a id="${build}-showlink" onclick="${open_build}" title="${%Show details}">
+							<l:icon class="icon-document-add icon-sm"/>
+						</a>
+						<a id="${build}-hidelink" onclick="${close_build}" title="${%Hide details}" style="display:none">
+							<l:icon class="icon-document-delete icon-sm"/>
+						</a>
+						<st:nbsp/>
+						<a class="model-link inside"><j:out value="${build}"/></a>
+						<div id="${build}" style="display: none;">
+							<j:set var="build_xml" value="${it.getBuildXML(build)}"/>
+							<j:set var="cases" value="${build_xml.getSuite().get(0).getCase()}"/>
+							<div id="${build}-${%fail-case}">
+								<dd>
+									<h4>${%Cases Failed}</h4>
+								</dd>
+								<j:forEach var="case" items="${cases}">
+									<j:set var="total_case" value="${total_case+1}"/>
+									<j:set var="open_case" value="showCase('${build}-${case}')"/>
+									<j:set var="close_case" value="hideCase('${build}-${case}')"/>
+									<j:if test="${case.getFailedSince()!=0}">
+										<j:set var="fail_case" value="${fail_case+1}"/>
+										<dd>
+											<a id="${build}-${case}-showlink" onclick="${open_case}" title="${%Show details}">
+												<l:icon class="icon-document-add icon-sm"/>
+											</a>
+											<a id="${build}-${case}-hidelink" onclick="${close_case}" title="${%Hide details}" style="display:none">
+												<l:icon class="icon-document-delete icon-sm"/>
+											</a>
+											<st:nbsp/>
+											<a class="model-link inside"><st:out value="${case.getClassName()}"/></a>
+											<div id="${build}-${case}" style="display: none;">
+												<pre><st:out value="${case.getStdout()}"/></pre>
+											</div>
+										</dd>
+									</j:if>
+								</j:forEach>
+							</div>
+							<div id="${build}-${%pass-case}">
+								<dd>
+									<h4>${%Cases Passed}</h4>
+								</dd>
+								<j:forEach var="case" items="${cases}">
+									<j:set var="open_case" value="showCase('${build}-${case}')"/>
+									<j:set var="close_case" value="hideCase('${build}-${case}')"/>
+									<j:if test="${case.getFailedSince()==0}">
+										<j:set var="pass_case" value="${pass_case+1}"/>
+										<dd>
+											<a id="${build}-${case}-showlink" onclick="${open_case}" title="${%Show details}">
+												<l:icon class="icon-document-add icon-sm"/>
+											</a>
+											<a id="${build}-${case}-hidelink" onclick="${close_case}" title="${%Hide details}" style="display:none">
+												<l:icon class="icon-document-delete icon-sm"/>
+											</a>
+											<st:nbsp/>
+											<a class="model-link inside"><st:out value="${case.getClassName()}"/></a>
+											<div id="${build}-${case}" style="display: none;">
+												<pre><st:out value="${case.getStdout()}"/></pre>
+											</div>
+										</dd>
+									</j:if>
+								</j:forEach>
+							</div>
+						</div>
+					</td>
+					<td>
+					</td>
+					<td>
+						<j:out value="${build_info.getDuration()}"/>
+					</td>
+					<td>
+						<j:out value="${fail_case}"/>
+					</td>
+					<td>
+						<j:out value="${pass_case}"/>
+					</td>
+					<td>
+						<j:out value="${total_case}"/>
+					</td>
+					<td>
+						<j:out value="${%Yes}"/>
+					</td>
+				</tr>
+			</tbody>
+		</j:forEach>
+	</table>
+</j:jelly>

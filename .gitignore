@@ -3,7 +3,10 @@
 
 #ignore eclipse workspace
 .project
-.pydevproject
+.classpath
+.settings
 
-#ignore runtime tepmorary file
-runtime/
+#ignore mvn folder
+work/
+target/
+xunitreportview/

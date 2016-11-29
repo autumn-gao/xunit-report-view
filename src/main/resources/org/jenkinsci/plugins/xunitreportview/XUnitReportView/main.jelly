@@ -1,0 +1,17 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta http-equiv="refresh" content="${from.refresh}" />
+
+	<j:choose>
+		<j:when test="${empty(items)}">
+			<st:include page="noJob.jelly" />
+		</j:when>
+		<j:otherwise>
+			<j:forEach var="job" items="${it.getJobList()}">
+				<h2>${job}</h2>
+				<st:include page="builds.jelly" />
+			</j:forEach>
+		</j:otherwise>
+	</j:choose>
+</j:jelly>
