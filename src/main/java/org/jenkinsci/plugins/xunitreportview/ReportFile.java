@@ -6,8 +6,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,6 +53,13 @@ public class ReportFile {
 		for (File build : builds) {
 			buildlist.add(build.getAbsolutePath());
 		}
+		// sort builds via time
+		Collections.sort(buildlist, new Comparator<String>() {
+			@Override
+			public int compare(String f1, String f2) {
+				return f2.compareTo(f1);
+			}
+		});
 		return buildlist;
 	}
 
