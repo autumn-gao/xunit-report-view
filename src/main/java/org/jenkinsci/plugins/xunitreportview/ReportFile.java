@@ -9,16 +9,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReportFile {
 	private static Map<File, File[]> buildmap = null;
 	private static ArrayList<String> joblist = null;
 	private static ArrayList<String> buildlist = null;
 
-	static ArrayList<String> getJobList(String filePath) {
+	static ArrayList<String> getJobList(String filePath, final String filter) {
 		joblist = new ArrayList<String>();
 		File root = new File(filePath);
-		File[] jobs = root.listFiles();
+		File[] jobs = root.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				Pattern pattern = Pattern.compile(filter);
+				Matcher match = pattern.matcher(name);
+				return match.find();
+			}
+		});
 		for (File job : jobs) {
 			joblist.add(job.getAbsolutePath());
 		}
@@ -79,9 +88,11 @@ public class ReportFile {
 
 	public static void main(String[] args) throws Exception {
 		String reportPath = "/jenkins-results/reports";
+		String filterPartten = "^rhsm-*";
+		// String filterPartten = "^virt-who-*";
 		// File root = new File("/jenkins-results/reports/runtest");
 		// System.out.println(getBuilds(reportPath).get(root)[1].getName());
-		// System.out.println(getJobList(reportPath));
-		System.out.println(getBuildList("/jenkins-results/reports/rhsm-multy-arch-runtest"));
+		System.out.println(getJobList(reportPath, filterPartten));
+		// System.out.println(getBuildList("/jenkins-results/reports/rhsm-multy-arch-runtest"));
 	}
 }

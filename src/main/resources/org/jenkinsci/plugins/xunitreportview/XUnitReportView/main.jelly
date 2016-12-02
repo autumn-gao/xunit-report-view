@@ -4,14 +4,10 @@
 	<meta http-equiv="refresh" content="${from.refresh}" />
 
 	<j:choose>
-		<j:when test="${empty(items)}">
-			<st:include page="noJob.jelly" />
-		</j:when>
-		<j:otherwise>
-			<j:forEach var="job" items="${it.getJobList()}">
-				<h2>${job}</h2>
-				<st:include page="builds.jelly" />
-			</j:forEach>
-		</j:otherwise>
+		<j:forEach var="job" items="${it.getJobList()}">
+			<h2>${job}</h2>
+			<st:include page="builds.jelly" />
+		</j:forEach>
 	</j:choose>
+
 </j:jelly>

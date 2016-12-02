@@ -1,32 +1,15 @@
 package org.jenkinsci.plugins.xunitreportview;
 
 import hudson.Extension;
-import hudson.Functions;
-import hudson.Util;
-import hudson.model.Item;
-import hudson.model.ListView;
-import hudson.model.Run;
+import hudson.model.*;
 import hudson.model.ViewDescriptor;
 import hudson.model.Descriptor.FormException;
-import hudson.util.FormValidation;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import javax.servlet.ServletException;
 
-import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
-import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
@@ -44,18 +27,17 @@ public class XUnitReportView extends ListView {
 	}
 
 	@DataBoundSetter
-	Map<String, Map<String, JunitXML>> resultMap = null;
+	String filterPartten = "";
 
-	public Map<String, Map<String, JunitXML>> getResultMap() {
-		return JunitUnmarshal.getResultMap(reportPath);
+	public String getFilterPartten() {
+		return filterPartten;
 	}
 
 	@DataBoundSetter
 	ArrayList<String> jobList = null;
 
 	public ArrayList<String> getJobList() {
-		String filePath = this.reportPath;
-		return ReportFile.getJobList(filePath);
+		return ReportFile.getJobList(reportPath, filterPartten);
 	}
 
 	@DataBoundSetter
@@ -85,6 +67,7 @@ public class XUnitReportView extends ListView {
 	protected void submit(StaplerRequest req) throws ServletException, IOException, FormException {
 		super.submit(req);
 		this.reportPath = req.getParameter("reportPath");
+		this.filterPartten = req.getParameter("filterPartten");
 	}
 
 	@Extension
