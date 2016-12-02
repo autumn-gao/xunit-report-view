@@ -23,9 +23,13 @@ public class ReportFile {
 		File[] jobs = root.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				Pattern pattern = Pattern.compile(filter);
-				Matcher match = pattern.matcher(name);
-				return match.find();
+				if (filter == null || filter == "") {
+					return true;
+				} else {
+					Pattern pattern = Pattern.compile(filter);
+					Matcher match = pattern.matcher(name);
+					return match.find();
+				}
 			}
 		});
 		for (File job : jobs) {
