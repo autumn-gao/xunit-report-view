@@ -6,6 +6,8 @@ import hudson.model.ViewDescriptor;
 import hudson.model.Descriptor.FormException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -33,25 +35,20 @@ public class XUnitReportView extends ListView {
 		return filterPartten;
 	}
 
-	@DataBoundSetter
-	ArrayList<String> jobList = null;
-
 	public ArrayList<String> getJobList() {
 		return ReportFile.getJobList(reportPath, filterPartten);
 	}
-
-	@DataBoundSetter
-	ArrayList<String> buildList = null;
 
 	public ArrayList<String> getBuildList(String jobPath) {
 		return ReportFile.getBuildList(jobPath);
 	}
 
-	@DataBoundSetter
-	JunitXML buildXML = null;
-
 	public JunitXML getBuildXML(String buildPath) {
 		return JunitUnmarshal.parseBuildXML(buildPath);
+	}
+
+	public Map<String, ArrayList<Case>> getCases(JunitXML caseXML) {
+		return JunitUnmarshal.getCasesMap(caseXML);
 	}
 
 	/**

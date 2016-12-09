@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.xunitreportview;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,9 +51,26 @@ public class JunitUnmarshal {
 		return junitxml;
 	}
 
+	public static Map<String, ArrayList<Case>> getCasesMap(JunitXML caseXML) {
+		ArrayList<Case> failedCases = new ArrayList<Case>();
+		ArrayList<Case> passedCases = new ArrayList<Case>();
+		Map<String, ArrayList<Case>> allCases = new HashMap<String, ArrayList<Case>>();
+		for (Case item : caseXML.getSuite().get(0).getCase()) {
+			if (!"0".equals(item.getFailedSince())) {
+				failedCases.add(item);
+			} else {
+				passedCases.add(item);
+			}
+		}
+		allCases.put("failed", failedCases);
+		allCases.put("passed", passedCases);
+		return allCases;
+	}
+
 	public static void main(String[] args) {
 		String reportPath = "/jenkins-results/reports";
-		System.out.println(JunitUnmarshal.getResultMap(reportPath).get("rhsm-multy-arch-runtest").get("2016-11-04_02-40-34").getSuite().get(0)
-				.getCase().get(1).getStdout());
+		JunitXML caseXML = JunitUnmarshal
+				.parseBuildXML("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-33");
+		System.out.println(JunitUnmarshal.getCasesMap(caseXML).get("failed").get(0).getClassName());
 	}
 }
