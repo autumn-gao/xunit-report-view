@@ -67,8 +67,31 @@ public class JunitUnmarshal {
 		return allCases;
 	}
 
+	public static Map<String, String> getBuildInfo(String buildPath) {
+		Map<String, String> buildInfo = new HashMap<String, String>();
+		JunitXML buildXML = parseBuildXML(buildPath);
+		int fail_case = 0;
+		int pass_case = 0;
+		int total_case = 0;
+		String duration = "";
+		duration = buildXML.getDuration();
+		for (Case item : buildXML.getSuite().get(0).getCase()) {
+			if (!"0".equals(item.getFailedSince())) {
+				fail_case += 1;
+			} else {
+				pass_case += 1;
+			}
+			total_case += 1;
+		}
+		buildInfo.put("duration", duration);
+		buildInfo.put("fail_case", Integer.toString(fail_case));
+		buildInfo.put("pass_case", Integer.toString(pass_case));
+		buildInfo.put("total_case", Integer.toString(total_case));
+		return buildInfo;
+	}
+
 	public static void main(String[] args) {
-		String reportPath = "/jenkins-results/reports";
+		// String reportPath = "/jenkins-results/reports";
 		JunitXML caseXML = JunitUnmarshal
 				.parseBuildXML("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-33");
 		System.out.println(JunitUnmarshal.getCasesMap(caseXML).get("failed").get(0).getClassName());

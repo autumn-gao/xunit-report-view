@@ -43,6 +43,10 @@ public class XUnitReportView extends ListView {
 		return ReportFile.getBuildList(jobPath);
 	}
 
+	public Map<String, String> getBuildInfo(String buildPath) {
+		return JunitUnmarshal.getBuildInfo(buildPath);
+	}
+
 	public JunitXML getBuildXML(String buildPath) {
 		return JunitUnmarshal.parseBuildXML(buildPath);
 	}
