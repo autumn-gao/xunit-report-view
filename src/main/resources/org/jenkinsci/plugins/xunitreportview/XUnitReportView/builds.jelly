@@ -1,0 +1,117 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<st:once>
+		<script type="text/javascript">
+			function showBuild(id,query) {
+				var element = document.getElementById(id);
+				element.style.display = "";
+				document.getElementById(id + "-showlink").style.display = "none";
+				document.getElementById(id + "-hidelink").style.display = "";
+
+				if (typeof query !== 'undefined') {
+					var rqo = new XMLHttpRequest();
+					rqo.open('GET', query+"?build="+id, true);
+					rqo.onreadystatechange = function() { element.innerHTML = rqo.responseText; }
+					rqo.send(null);
+				}
+			}
+
+			function hideBuild(id) {
+				document.getElementById(id).style.display = "none";
+				document.getElementById(id + "-showlink").style.display = "";
+				document.getElementById(id + "-hidelink").style.display = "none";
+			}
+
+			function showCase(id) {
+				var element = document.getElementById(id);
+				element.style.display = "";
+				document.getElementById(id + "-showlink").style.display = "none";
+				document.getElementById(id + "-hidelink").style.display = "";
+			}
+
+			function hideCase(id) {
+				document.getElementById(id).style.display = "none";
+				document.getElementById(id + "-showlink").style.display = "";
+				document.getElementById(id + "-hidelink").style.display = "none";
+			}
+
+		</script>
+		<style type="text/css">
+			.build-detail {
+			margin-left: 2em;
+			}
+	
+			.build-detail h4 {
+			margin: 0.5em 0 0.5em 0;
+			}
+	
+			.build-detail h4 a {
+			text-decoration: none;
+			color: inherit;
+			}
+	
+			.build-detail h4 a img {
+			width: 8px;
+			height: 8px;
+			}
+	
+			.build-detail pre {
+			margin-left: 2em;
+			}
+		</style>
+	</st:once>
+
+	<j:set var="builds" value="${it.getBuildList(job)}"/>
+	<table class="pane sortable bigtable stripped" id="job_tbl">
+		<tr>
+			<td class="pane-header">${%Build}</td>
+			<td class="pane-header">${%Description}</td>
+			<td class="pane-header" style="width:5em">${%Duration}</td>
+			<td class="pane-header" style="width:5em">${%Fail}</td>
+			<td class="pane-header" style="width:5em">${%Pass}</td>
+			<td class="pane-header" style="width:5em">${%Total}</td>
+			<td class="pane-header" style="width:5em">${%Delete?}</td>
+		</tr>
+		<j:forEach var="build" items="${builds}">
+			<j:set var="total_case" value="${0}"/>
+			<j:set var="fail_case" value="${0}"/>
+			<j:set var="pass_case" value="${0}"/>
+			<tbody>
+				<tr>
+					<td>
+						<j:set var="open_build" value="showBuild('${build}','detail')"/>
+						<j:set var="close_build" value="hideBuild('${build}')"/>
+						<a id="${build}-showlink" onclick="${open_build}" title="${%Show details}">
+							<l:icon class="icon-document-add icon-sm"/>
+						</a>
+						<a id="${build}-hidelink" onclick="${close_build}" title="${%Hide details}" style="display:none">
+							<l:icon class="icon-document-delete icon-sm"/>
+						</a>
+						<st:nbsp/>
+						<a class="model-link inside"><j:out value="${build}"/></a>
+						<div id="${build}" class="build-detail" style="display: none;">
+							${%Loading...}
+						</div>
+					</td>
+					<td>
+					</td>
+					<td>
+						<j:out value="${build_info.getDuration()}"/>
+					</td>
+					<td>
+						<j:out value="${fail_case}"/>
+					</td>
+					<td>
+						<j:out value="${pass_case}"/>
+					</td>
+					<td>
+						<j:out value="${total_case}"/>
+					</td>
+					<td>
+						<j:out value="${%Yes}"/>
+					</td>
+				</tr>
+			</tbody>
+		</j:forEach>
+	</table>
+</j:jelly>
