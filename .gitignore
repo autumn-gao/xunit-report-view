@@ -9,4 +9,3 @@
 #ignore mvn folder
 work/
 target/
-xunitreportview/
