@@ -1,0 +1,59 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+	<st:once>
+		<script type="text/javascript">
+			function showCase(id) {
+				var element = document.getElementById(id);
+				element.style.display = "";
+				document.getElementById(id + "-showlink").style.display = "none";
+				document.getElementById(id + "-hidelink").style.display = "";
+			}
+
+			function hideCase(id) {
+				document.getElementById(id).style.display = "none";
+				document.getElementById(id + "-showlink").style.display = "";
+				document.getElementById(id + "-hidelink").style.display = "none";
+			}
+
+		</script>
+	</st:once>
+	<l:layout>
+		<st:include page="sidepanel.jelly" />
+		<l:main-panel>
+			<d:taglib uri="local">
+				<d:tag name="item">
+					<j:if test="${value!=null and !empty value}">
+						<j:set var="id" value="${attrs.id}-${attrs.name}"/>
+						<j:set var="open_case" value="showCase('${id}')"/>
+						<j:set var="close_case" value="hideCase('${id}')"/>
+						<h4>
+							<a id="${id}-showlink" onclick="${open_case}" title="Show Output">
+								<l:icon class="icon-document-add icon-sm"/><st:nbsp/>${title}
+							</a>
+							<a id="${id}-hidelink" onclick="${close_case}" title="Hide Output" style="display:none">
+								<l:icon class="icon-document-delete icon-sm"/><st:nbsp/>${title}
+							</a>
+						</h4>
+						<pre id="${id}" style="display: none;">
+							<st:out value="${value}"/>
+						</pre>
+					</j:if>
+				</d:tag>
+			</d:taglib>
+
+			<j:set var="build" value="${request.getParameter('build')}"/>
+			<j:set var="build_xml" value="${it.getBuildXML(build)}"/>
+			<j:set var="all_cases" value="${it.getCases(build_xml)}"/>
+			<j:set var="failed_cases" value="${all_cases.get('failed')}"/>
+			<j:set var="passed_cases" value="${all_cases.get('passed')}"/>
+			<j:out value="${%All Failed Cases}"/>
+			<j:forEach var="case" items="${failed_cases}">
+				<local:item id="${build}" name="${case.getClassName()}" title="${case.getClassName()}" value="${case.getStdout()}"/>
+			</j:forEach>
+			<j:out value="${%All Passed Cases}"/>
+			<j:forEach var="case" items="${passed_cases}">
+				<local:item id="${build}" name="${case.getClassName()}" title="${case.getClassName()}" value="${case.getStdout()}"/>
+			</j:forEach>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>

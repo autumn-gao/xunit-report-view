@@ -1,11 +1,14 @@
 package org.jenkinsci.plugins.xunitreportview;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -90,10 +93,29 @@ public class JunitUnmarshal {
 		return buildInfo;
 	}
 
+	public static Properties getRuntimeInfo(String buildPath) {
+		File runtimeFile = new File(buildPath + "/" + "RUNTIME_INFO.txt");
+		FileInputStream inpf = null;
+		try {
+			inpf = new FileInputStream(runtimeFile);
+		} catch (FileNotFoundException e1) {
+			return null;
+		}
+		Properties runtimeProperties = new Properties();
+		try {
+			runtimeProperties.load(inpf);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return runtimeProperties;
+	}
+
 	public static void main(String[] args) {
 		// String reportPath = "/jenkins-results/reports";
-		JunitXML caseXML = JunitUnmarshal
-				.parseBuildXML("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-33");
-		System.out.println(JunitUnmarshal.getCasesMap(caseXML).get("failed").get(0).getClassName());
+		// JunitXML caseXML = JunitUnmarshal
+		// .parseBuildXML("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-33");
+		// System.out.println(JunitUnmarshal.getCasesMap(caseXML).get("failed").get(0).getClassName());
+		System.out.println(getRuntimeInfo("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-36")
+				.getProperty("RHEL_COMPOSE"));
 	}
 }

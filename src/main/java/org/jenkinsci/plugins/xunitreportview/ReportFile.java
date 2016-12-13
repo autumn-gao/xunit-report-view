@@ -46,7 +46,7 @@ public class ReportFile {
 		File[] builds = root.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return daysPassed(name) < 30;
+				return daysPassed(name) < 30 && (!name.endsWith("-Delete"));
 			}
 		});
 		for (File build : builds) {
@@ -60,6 +60,10 @@ public class ReportFile {
 			}
 		});
 		return buildlist;
+	}
+
+	static String getLatestBuild(String job) {
+		return getBuildList(job).get(0);
 	}
 
 	static Map<File, File[]> getBuilds(String filePath) {
@@ -99,13 +103,25 @@ public class ReportFile {
 		return Integer.parseInt(String.valueOf(between_days));
 	}
 
+	static String deleteBuild(String filePath) {
+		File file = new File(filePath);
+		File file_delete = new File(filePath + "-Delete");
+		if (file.exists()) {
+			file.renameTo(file_delete);
+		}
+		return "Sucess";
+	}
+
 	public static void main(String[] args) throws Exception {
-		String reportPath = "/jenkins-results/reports";
-		String filterPartten = "^rhsm-*";
+		// String reportPath = "/jenkins-results/reports";
+		// String filterPartten = "^rhsm-*";
 		// String filterPartten = "^virt-who-*";
 		// File root = new File("/jenkins-results/reports/runtest");
 		// System.out.println(getBuilds(reportPath).get(root)[1].getName());
-		System.out.println(getJobList(reportPath, filterPartten));
+		// System.out.println(getJobList(reportPath, filterPartten));
 		// System.out.println(getBuildList("/jenkins-results/reports/rhsm-multy-arch-runtest"));
+		// System.out.println(getLatestBuild("/jenkins-results/reports/rhsm-multy-arch-runtest"));
+		System.out.println(deleteBuild("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-36"));
+
 	}
 }

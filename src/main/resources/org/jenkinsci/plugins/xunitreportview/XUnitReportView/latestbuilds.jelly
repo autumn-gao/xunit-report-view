@@ -61,7 +61,7 @@
 		</style>
 	</st:once>
 
-	<j:set var="builds" value="${it.getBuildList(job)}"/>
+	<j:set var="build" value="${it.getLatestBuild(job)}"/>
 	<table class="pane sortable bigtable stripped" id="job_tbl">
 		<tr>
 			<td class="pane-header">${%Build}</td>
@@ -72,48 +72,46 @@
 			<td class="pane-header" style="width:5em">${%Total}</td>
 			<td class="pane-header" style="width:5em">${%Delete?}</td>
 		</tr>
-		<j:forEach var="build" items="${builds}">
 			<j:set var="build_info" value="${it.getBuildInfo(build)}"/>
 			<j:set var="duration" value="${build_info.get('duration')}"/>
 			<j:set var="total_case" value="${build_info.get('total_case')}"/>
 			<j:set var="fail_case" value="${build_info.get('fail_case')}"/>
 			<j:set var="pass_case" value="${build_info.get('pass_case')}"/>
-			<tbody>
-				<tr>
-					<td>
-						<j:set var="open_build" value="showBuild('${build}','detail')"/>
-						<j:set var="close_build" value="hideBuild('${build}')"/>
-						<a id="${build}-showlink" onclick="${open_build}" title="${%Show details}">
-							<l:icon class="icon-document-add icon-sm"/>
-						</a>
-						<a id="${build}-hidelink" onclick="${close_build}" title="${%Hide details}" style="display:none">
-							<l:icon class="icon-document-delete icon-sm"/>
-						</a>
-						<st:nbsp/>
-						<a href="singlebuild?build=${build}" class="model-link inside"><j:out value="${build}"/></a>
-						<div id="${build}" class="build-detail" style="display: none;">
-							${%Loading...}
-						</div>
-					</td>
-					<td>
-					</td>
-					<td>
-						<j:out value="${duration}"/>
-					</td>
-					<td>
-						<j:out value="${fail_case}"/>
-					</td>
-					<td>
-						<j:out value="${pass_case}"/>
-					</td>
-					<td>
-						<j:out value="${total_case}"/>
-					</td>
-					<td>
-						<a href="delete?build=${build}"><j:out value="${%Yes}"/></a>
-					</td>
-				</tr>
-			</tbody>
-		</j:forEach>
+		<tbody>
+			<tr>
+				<td>
+					<j:set var="open_build" value="showBuild('${build}','detail')"/>
+					<j:set var="close_build" value="hideBuild('${build}')"/>
+					<a id="${build}-showlink" onclick="${open_build}" title="${%Show details}">
+						<l:icon class="icon-document-add icon-sm"/>
+					</a>
+					<a id="${build}-hidelink" onclick="${close_build}" title="${%Hide details}" style="display:none">
+						<l:icon class="icon-document-delete icon-sm"/>
+					</a>
+					<st:nbsp/>
+					<a class="model-link inside"><j:out value="${build}"/></a>
+					<div id="${build}" class="build-detail" style="display: none;">
+						${%Loading...}
+					</div>
+				</td>
+				<td>
+				</td>
+				<td>
+					<j:out value="${duration}"/>
+				</td>
+				<td>
+					<j:out value="${fail_case}"/>
+				</td>
+				<td>
+					<j:out value="${pass_case}"/>
+				</td>
+				<td>
+					<j:out value="${total_case}"/>
+				</td>
+				<td>
+					<j:out value="${%Yes}"/>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 </j:jelly>

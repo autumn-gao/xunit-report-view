@@ -3,15 +3,21 @@
 	Edit View Page
 -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
-
-	<!-- add local report path to generate report, eg: /root/reports/ -->
-	<f:entry title="${%xUnit Report Location}" field="reportPath">
-		<f:textbox name="reportPath" field="reportPath"/>
-	</f:entry>
-
-	<!-- add filter to generate report, eg: ^rhsm-* -->
-	<f:entry title="${%xUnit Report Filter}" field="filterPartten">
-		<f:textbox name="filterPartten" field="filterPartten"/>
-	</f:entry>
-
+	<f:section title="${%xUnit Report Configure}">
+		<f:block>
+			<!-- add local report path to generate report, eg: /root/reports/ -->
+			<f:entry title="${%xUnit Report Location}" field="reportPath">
+				<f:textbox name="reportPath" field="reportPath"/>
+			</f:entry>
+		</f:block>
+		<f:block>
+			<!-- add filter to generate report, eg: ^rhsm-* -->
+			<f:entry title="${%xUnit Report Filter}" field="filterPartten">
+				<f:textbox name="filterPartten" field="filterPartten"/>
+			</f:entry>
+		</f:block>
+		<f:block>
+			${%Create latest build view?}<f:checkbox name="viewLatestReport" field="viewLatestReport" />
+		</f:block>
+	</f:section>
 </j:jelly>

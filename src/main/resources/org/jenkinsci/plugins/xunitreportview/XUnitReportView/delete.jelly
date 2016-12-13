@@ -1,0 +1,21 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+	<l:layout>
+		<st:include page="sidepanel.jelly" />
+		<l:main-panel>
+<!--
+			<form method="post" action="deleteBuild">
+			<f:block>
+				${%Are you sure about deleting this build?}
+				<f:submit value="${%Yes}" />
+			</f:block>
+			</form>
+-->
+			<f:block>
+				<j:set var="build" value="${request.getParameter('build')}"/>
+				<j:set var="delete_result" value="${it.deleteBuild(build)}"/>
+				${delete_result} to delete ${build}
+			</f:block>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>
