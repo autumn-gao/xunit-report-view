@@ -69,7 +69,13 @@ public class ReportFile {
 	}
 
 	static String getLatestBuild(String job) {
-		return getBuildList(job).get(0);
+		String latest_build = "";
+		try {
+			latest_build = getBuildList(job).get(0);
+		} catch (Exception e) {
+			System.out.println("Failed to get latest build for: " + job);
+		}
+		return latest_build;
 	}
 
 	static String deleteBuild(String filePath) {

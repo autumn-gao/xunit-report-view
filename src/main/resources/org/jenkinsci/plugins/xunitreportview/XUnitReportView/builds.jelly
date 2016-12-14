@@ -74,6 +74,7 @@
 		</tr>
 		<j:forEach var="build" items="${builds}">
 			<j:set var="build_info" value="${it.getBuildInfo(build)}"/>
+			<j:set var="compose" value="${it.getRuntimeInfo(build).getProperty('RHEL_COMPOSE')}"/>
 			<j:set var="duration" value="${build_info.get('duration')}"/>
 			<j:set var="total_case" value="${build_info.get('total_case')}"/>
 			<j:set var="fail_case" value="${build_info.get('fail_case')}"/>
@@ -90,7 +91,7 @@
 							<l:icon class="icon-document-delete icon-sm"/>
 						</a>
 						<st:nbsp/>
-						<a href="buildsingle?build=${build}" class="model-link inside"><j:out value="${build}"/></a>
+						<a href="buildsingle?build=${build}" class="model-link inside"><j:out value="${build} (${compose})"/></a>
 						<div id="${build}" class="build-detail" style="display: none;">
 							${%Loading...}
 						</div>
