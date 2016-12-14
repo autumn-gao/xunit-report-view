@@ -17,14 +17,15 @@ import javax.xml.bind.Unmarshaller;
 public class JunitUnmarshal {
 
 	public static JunitXML parseBuildXML(String buildPath) {
+		String build_file = buildPath + "/" + "junitResult.xml";
 		JunitXML junitxml = null;
 		try {
-			File file = new File(buildPath + "/" + "junitResult.xml");
+			File file = new File(build_file);
 			JAXBContext jaxbContext = JAXBContext.newInstance(JunitXML.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			junitxml = (JunitXML) jaxbUnmarshaller.unmarshal(file);
-		} catch (JAXBException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Failed to parse: " + build_file);
 		}
 		return junitxml;
 	}
@@ -69,18 +70,15 @@ public class JunitUnmarshal {
 	}
 
 	public static Properties getRuntimeInfo(String buildPath) {
-		File runtimeFile = new File(buildPath + "/" + "RUNTIME_INFO.txt");
-		FileInputStream inpf = null;
-		try {
-			inpf = new FileInputStream(runtimeFile);
-		} catch (FileNotFoundException e1) {
-			return null;
-		}
+		String runtime_info_file = buildPath + "/" + "RUNTIME_INFO.txt";
 		Properties runtimeProperties = new Properties();
 		try {
+			File runtimeFile = new File(runtime_info_file);
+			FileInputStream inpf = null;
+			inpf = new FileInputStream(runtimeFile);
 			runtimeProperties.load(inpf);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Failed to get properties file: " + runtime_info_file);
 		}
 		return runtimeProperties;
 	}

@@ -15,50 +15,56 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ReportFile {
-	private static Map<File, File[]> buildmap = null;
-	private static ArrayList<String> joblist = null;
-	private static ArrayList<String> buildlist = null;
 
 	static ArrayList<String> getJobList(String filePath, final String filter) {
-		joblist = new ArrayList<String>();
-		File root = new File(filePath);
-		File[] jobs = root.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				if (filter == null || filter == "") {
-					return true;
-				} else {
-					Pattern pattern = Pattern.compile(filter);
-					Matcher match = pattern.matcher(name);
-					return match.find();
+		ArrayList<String> joblist = new ArrayList<String>();
+		try {
+			File root = new File(filePath);
+			File[] jobs = root.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					if (filter == null || filter == "") {
+						return true;
+					} else {
+						Pattern pattern = Pattern.compile(filter);
+						Matcher match = pattern.matcher(name);
+						return match.find();
+					}
 				}
+			});
+			for (File job : jobs) {
+				joblist.add(job.getAbsolutePath());
 			}
-		});
-		for (File job : jobs) {
-			joblist.add(job.getAbsolutePath());
+		} catch (Exception e) {
+			System.out.println("Failed to get job list from: " + filePath);
 		}
 		return joblist;
 	}
 
 	static ArrayList<String> getBuildList(String job) {
-		buildlist = new ArrayList<String>();
-		File root = new File(job + "/" + "builds");
-		File[] builds = root.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return daysPassed(name) < 30 && (!name.endsWith("-Delete"));
+		ArrayList<String> buildlist = new ArrayList<String>();
+		String build_path = job + "/" + "builds";
+		try {
+			File root = new File(build_path);
+			File[] builds = root.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return daysPassed(name) < 30 && (!name.endsWith("-Delete"));
+				}
+			});
+			for (File build : builds) {
+				buildlist.add(build.getAbsolutePath());
 			}
-		});
-		for (File build : builds) {
-			buildlist.add(build.getAbsolutePath());
+			// sort builds via time
+			Collections.sort(buildlist, new Comparator<String>() {
+				@Override
+				public int compare(String f1, String f2) {
+					return f2.compareTo(f1);
+				}
+			});
+		} catch (Exception e) {
+			System.out.println("Failed to get build list from: " + build_path);
 		}
-		// sort builds via time
-		Collections.sort(buildlist, new Comparator<String>() {
-			@Override
-			public int compare(String f1, String f2) {
-				return f2.compareTo(f1);
-			}
-		});
 		return buildlist;
 	}
 
@@ -67,12 +73,18 @@ public class ReportFile {
 	}
 
 	static String deleteBuild(String filePath) {
-		File file = new File(filePath);
-		File file_delete = new File(filePath + "-Delete");
-		if (file.exists()) {
-			file.renameTo(file_delete);
+		String delete_result = "Succeed";
+		try {
+			File file = new File(filePath);
+			File file_delete = new File(filePath + "-Delete");
+			if (file.exists()) {
+				file.renameTo(file_delete);
+			}
+		} catch (Exception e) {
+			System.out.println("Failed to delete: " + filePath);
+			delete_result = "Failed";
 		}
-		return "Sucess";
+		return delete_result;
 	}
 
 	public static int daysPassed(String date_string) {
