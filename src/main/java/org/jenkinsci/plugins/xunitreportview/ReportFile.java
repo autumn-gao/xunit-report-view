@@ -66,23 +66,13 @@ public class ReportFile {
 		return getBuildList(job).get(0);
 	}
 
-	static Map<File, File[]> getBuilds(String filePath) {
-		buildmap = new HashMap<File, File[]>();
-		File root = new File(filePath);
-		File[] jobs = root.listFiles();
-		for (File job : jobs) {
-			if (job.isDirectory()) {
-				File build = new File(job.getAbsolutePath() + "/" + "builds");
-				File[] buildlist = build.listFiles(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return daysPassed(name) < 30;
-					}
-				});
-				buildmap.put(job, buildlist);
-			}
+	static String deleteBuild(String filePath) {
+		File file = new File(filePath);
+		File file_delete = new File(filePath + "-Delete");
+		if (file.exists()) {
+			file.renameTo(file_delete);
 		}
-		return buildmap;
+		return "Sucess";
 	}
 
 	public static int daysPassed(String date_string) {
@@ -101,15 +91,6 @@ public class ReportFile {
 			e.printStackTrace();
 		}
 		return Integer.parseInt(String.valueOf(between_days));
-	}
-
-	static String deleteBuild(String filePath) {
-		File file = new File(filePath);
-		File file_delete = new File(filePath + "-Delete");
-		if (file.exists()) {
-			file.renameTo(file_delete);
-		}
-		return "Sucess";
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -6,7 +6,7 @@
 		<j:when test="${it.isViewLatestReport()}">
 			<j:forEach var="job" items="${it.getJobList()}">
 				<h2>${job}</h2>
-				<st:include page="latestbuilds.jelly" />
+				<st:include page="buildlatest.jelly" />
 			</j:forEach>
 		</j:when>
 		<j:otherwise>

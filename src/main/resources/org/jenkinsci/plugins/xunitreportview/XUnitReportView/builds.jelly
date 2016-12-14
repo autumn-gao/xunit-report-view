@@ -81,7 +81,7 @@
 			<tbody>
 				<tr>
 					<td>
-						<j:set var="open_build" value="showBuild('${build}','detail')"/>
+						<j:set var="open_build" value="showBuild('${build}','builddetail')"/>
 						<j:set var="close_build" value="hideBuild('${build}')"/>
 						<a id="${build}-showlink" onclick="${open_build}" title="${%Show details}">
 							<l:icon class="icon-document-add icon-sm"/>
@@ -90,7 +90,7 @@
 							<l:icon class="icon-document-delete icon-sm"/>
 						</a>
 						<st:nbsp/>
-						<a href="singlebuild?build=${build}" class="model-link inside"><j:out value="${build}"/></a>
+						<a href="buildsingle?build=${build}" class="model-link inside"><j:out value="${build}"/></a>
 						<div id="${build}" class="build-detail" style="display: none;">
 							${%Loading...}
 						</div>
@@ -110,7 +110,7 @@
 						<j:out value="${total_case}"/>
 					</td>
 					<td>
-						<a href="delete?build=${build}"><j:out value="${%Yes}"/></a>
+						<a href="builddelete?build=${build}"><j:out value="${%Yes}"/></a>
 					</td>
 				</tr>
 			</tbody>
