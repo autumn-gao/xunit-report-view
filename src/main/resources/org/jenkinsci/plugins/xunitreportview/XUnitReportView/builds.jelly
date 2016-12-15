@@ -73,6 +73,7 @@
 			<td class="pane-header" style="width:5em">${%Delete?}</td>
 		</tr>
 		<j:forEach var="build" items="${builds}">
+			<st:bind var="xunitreportview" value="${it}"/>
 			<j:set var="build_info" value="${it.getBuildInfo(build)}"/>
 			<j:set var="compose" value="${it.getRuntimeInfo(build).getProperty('RHEL_COMPOSE')}"/>
 			<j:set var="duration" value="${build_info.get('duration')}"/>
@@ -111,7 +112,7 @@
 						<j:out value="${total_case}"/>
 					</td>
 					<td>
-						<a href="builddelete?build=${build}"><j:out value="${%Yes}"/></a>
+						<a href="#" onClick="xunitreportview.deleteBuild('${build}')"><j:out value="${%Yes}"/></a>
 					</td>
 				</tr>
 			</tbody>

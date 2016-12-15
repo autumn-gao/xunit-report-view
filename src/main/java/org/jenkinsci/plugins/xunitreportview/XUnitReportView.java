@@ -57,8 +57,8 @@ public class XUnitReportView extends ListView {
 		return ReportFile.getLatestBuild(jobPath);
 	}
 
-	public String deleteBuild(String buildPath) {
-		return ReportFile.deleteBuild(buildPath);
+	public void deleteBuild(String buildPath) {
+		ReportFile.deleteBuild(buildPath);
 	}
 
 	public Map<String, String> getBuildInfo(String buildPath) {
@@ -75,6 +75,18 @@ public class XUnitReportView extends ListView {
 
 	public Map<String, ArrayList<Case>> getCases(JunitXML caseXML) {
 		return JunitUnmarshal.getCasesMap(caseXML);
+	}
+
+	@JavaScriptMethod
+	public String saveComment(String commentPath, String comment) {
+		System.out.println(commentPath + ":" + comment);
+		System.out.println("saveComment");
+		return "saveComment";
+	}
+
+	public String getComment(String commentPath) {
+		System.out.println("getComment");
+		return "getComment";
 	}
 
 	/**

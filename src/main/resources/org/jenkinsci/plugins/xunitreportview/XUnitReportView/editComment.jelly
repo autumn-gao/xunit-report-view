@@ -1,0 +1,14 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt">
+	<st:bind var="xunitreportview" value="${it}"/>
+	<j:set var="build" value="${request.getParameter('build')}"/>
+	<l:layout norefresh="true">
+		<st:include page="sidepanel.jelly"/>
+		<l:main-panel>
+			<f:entry>
+				<f:textarea name="comment" value="${it.getComment('GG')}"/>
+			</f:entry>
+			<div align="right"><a href="#" onClick="xunitreportview.saveComment(${build},'GG')"><j:out value="${%Save}"/></a></div>
+		</l:main-panel>
+	</l:layout>
+</j:jelly>

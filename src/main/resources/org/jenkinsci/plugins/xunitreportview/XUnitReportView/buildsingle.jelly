@@ -14,38 +14,56 @@
 				document.getElementById(id + "-showlink").style.display = "";
 				document.getElementById(id + "-hidelink").style.display = "none";
 			}
-
 		</script>
 	</st:once>
+	<d:taglib uri="local">
+		<d:tag name="item">
+			<j:if test="${value!=null and !empty value}">
+				<j:set var="id" value="${attrs.id}-${attrs.name}"/>
+				<j:set var="open_case" value="showCase('${id}')"/>
+				<j:set var="close_case" value="hideCase('${id}')"/>
+				<h4>
+					<a id="${id}-showlink" onclick="${open_case}" title="Show Output">
+						<l:icon class="icon-document-add icon-sm"/><st:nbsp/>${title}
+					</a>
+					<a id="${id}-hidelink" onclick="${close_case}" title="Hide Output" style="display:none">
+						<l:icon class="icon-document-delete icon-sm"/><st:nbsp/>${title}
+					</a>
+				</h4>
+				<pre id="${id}" style="display: none;">
+					<st:out value="${value}"/>
+				</pre>
+			</j:if>
+		</d:tag>
+	</d:taglib>
+
 	<l:layout>
 		<st:include page="sidepanel.jelly" />
 		<l:main-panel>
-			<d:taglib uri="local">
-				<d:tag name="item">
-					<j:if test="${value!=null and !empty value}">
-						<j:set var="id" value="${attrs.id}-${attrs.name}"/>
-						<j:set var="open_case" value="showCase('${id}')"/>
-						<j:set var="close_case" value="hideCase('${id}')"/>
-						<h4>
-							<a id="${id}-showlink" onclick="${open_case}" title="Show Output">
-								<l:icon class="icon-document-add icon-sm"/><st:nbsp/>${title}
-							</a>
-							<a id="${id}-hidelink" onclick="${close_case}" title="Hide Output" style="display:none">
-								<l:icon class="icon-document-delete icon-sm"/><st:nbsp/>${title}
-							</a>
-						</h4>
-						<pre id="${id}" style="display: none;">
-							<st:out value="${value}"/>
-						</pre>
-					</j:if>
-				</d:tag>
-			</d:taglib>
-
 			<j:set var="build" value="${request.getParameter('build')}"/>
 			<j:set var="build_xml" value="${it.getBuildXML(build)}"/>
 			<j:set var="all_cases" value="${it.getCases(build_xml)}"/>
 			<j:set var="failed_cases" value="${all_cases.get('failed')}"/>
 			<j:set var="passed_cases" value="${all_cases.get('passed')}"/>
+
+			<div id="comment">
+				<j:set var="comment" value="${it.getComment('GG')}"/>
+				<div>
+					<j:out value="${comment!=null ? comment : ''}" />
+				</div>
+				<div align="right"><a id="comment-link" href="editComment?build=${build}">
+					<l:icon class="icon-notepad icon-sm"/>
+					<j:choose>
+						<j:when test="${empty(comment)}">
+							${%add comment}
+						</j:when>
+						<j:otherwise>
+							${%edit comment}
+						</j:otherwise>
+					</j:choose>
+				</a></div>
+			</div>
+
 			<j:out value="${%All Failed Cases}"/>
 			<j:forEach var="case" items="${failed_cases}">
 				<local:item id="${build}" name="${case.getClassName()}" title="${case.getClassName()}" value="${case.getStdout()}"/>

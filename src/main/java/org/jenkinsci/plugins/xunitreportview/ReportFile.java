@@ -78,8 +78,7 @@ public class ReportFile {
 		return latest_build;
 	}
 
-	static String deleteBuild(String filePath) {
-		String delete_result = "Succeed";
+	static void deleteBuild(String filePath) {
 		try {
 			File file = new File(filePath);
 			File file_delete = new File(filePath + "-Delete");
@@ -88,9 +87,7 @@ public class ReportFile {
 			}
 		} catch (Exception e) {
 			System.out.println("Failed to delete: " + filePath);
-			delete_result = "Failed";
 		}
-		return delete_result;
 	}
 
 	public static int daysPassed(String date_string) {
@@ -120,7 +117,7 @@ public class ReportFile {
 		// System.out.println(getJobList(reportPath, filterPartten));
 		// System.out.println(getBuildList("/jenkins-results/reports/rhsm-multy-arch-runtest"));
 		// System.out.println(getLatestBuild("/jenkins-results/reports/rhsm-multy-arch-runtest"));
-		System.out.println(deleteBuild("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-36"));
+		deleteBuild("/jenkins-results/reports/rhsm-multy-arch-runtest/builds/2016-11-30_02-40-36");
 
 	}
 }
