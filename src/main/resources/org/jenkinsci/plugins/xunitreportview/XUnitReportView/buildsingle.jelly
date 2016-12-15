@@ -41,13 +41,13 @@
 		<st:include page="sidepanel.jelly" />
 		<l:main-panel>
 			<j:set var="build" value="${request.getParameter('build')}"/>
-			<j:set var="build_xml" value="${it.getBuildXML(build)}"/>
-			<j:set var="all_cases" value="${it.getCases(build_xml)}"/>
+			<j:set var="junit_result_xml" value="${it.getJunitResultXML(build)}"/>
+			<j:set var="all_cases" value="${it.getCases(junit_result_xml)}"/>
 			<j:set var="failed_cases" value="${all_cases.get('failed')}"/>
 			<j:set var="passed_cases" value="${all_cases.get('passed')}"/>
 
 			<div id="comment">
-				<j:set var="comment" value="${it.getComment('GG')}"/>
+				<j:set var="comment" value="${it.getComment(build)}"/>
 				<div>
 					<j:out value="${comment!=null ? comment : ''}" />
 				</div>

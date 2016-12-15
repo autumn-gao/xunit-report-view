@@ -80,7 +80,7 @@
 		<tbody>
 			<tr>
 				<td>
-					<j:set var="open_build" value="showBuild('${build}','detail')"/>
+					<j:set var="open_build" value="showBuild('${build}','builddetail')"/>
 					<j:set var="close_build" value="hideBuild('${build}')"/>
 					<a id="${build}-showlink" onclick="${open_build}" title="${%Show details}">
 						<l:icon class="icon-document-add icon-sm"/>

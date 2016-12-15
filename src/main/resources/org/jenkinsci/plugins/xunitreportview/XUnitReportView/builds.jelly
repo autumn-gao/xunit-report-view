@@ -62,6 +62,7 @@
 	</st:once>
 
 	<j:set var="builds" value="${it.getBuildList(job)}"/>
+	<st:bind var="xunitreportview" value="${it}"/>
 	<table class="pane sortable bigtable stripped" id="job_tbl">
 		<tr>
 			<td class="pane-header">${%Build}</td>
@@ -73,7 +74,6 @@
 			<td class="pane-header" style="width:5em">${%Delete?}</td>
 		</tr>
 		<j:forEach var="build" items="${builds}">
-			<st:bind var="xunitreportview" value="${it}"/>
 			<j:set var="build_info" value="${it.getBuildInfo(build)}"/>
 			<j:set var="compose" value="${it.getRuntimeInfo(build).getProperty('RHEL_COMPOSE')}"/>
 			<j:set var="duration" value="${build_info.get('duration')}"/>

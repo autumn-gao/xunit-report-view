@@ -9,8 +9,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,7 +100,6 @@ public class ReportFile {
 			long now = System.currentTimeMillis();
 			between_days = (now - build_time) / (1000 * 3600 * 24);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return Integer.parseInt(String.valueOf(between_days));

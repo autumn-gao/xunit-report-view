@@ -45,5 +45,4 @@ public class Suite {
 	public void setCase(ArrayList<Case> Case) {
 		this.cases = Case;
 	}
-
 }

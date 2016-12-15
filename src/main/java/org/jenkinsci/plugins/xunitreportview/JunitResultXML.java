@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "result")
-public class JunitXML {
+public class JunitResultXML {
 	public String getDuration() {
 		return duration;
 	}

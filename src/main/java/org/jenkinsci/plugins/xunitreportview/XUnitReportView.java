@@ -57,36 +57,35 @@ public class XUnitReportView extends ListView {
 		return ReportFile.getLatestBuild(jobPath);
 	}
 
+	@JavaScriptMethod
 	public void deleteBuild(String buildPath) {
 		ReportFile.deleteBuild(buildPath);
 	}
 
 	public Map<String, String> getBuildInfo(String buildPath) {
-		return JunitUnmarshal.getBuildInfo(buildPath);
+		return XMLUnmarshal.getBuildInfo(buildPath);
 	}
 
 	public Properties getRuntimeInfo(String buildPath) {
-		return JunitUnmarshal.getRuntimeInfo(buildPath);
+		return XMLUnmarshal.getRuntimeInfo(buildPath);
 	}
 
-	public JunitXML getBuildXML(String buildPath) {
-		return JunitUnmarshal.parseBuildXML(buildPath);
+	public JunitResultXML getJunitResultXML(String buildPath) {
+		return XMLUnmarshal.parseJunitResultXML(buildPath);
 	}
 
-	public Map<String, ArrayList<Case>> getCases(JunitXML caseXML) {
-		return JunitUnmarshal.getCasesMap(caseXML);
+	public Map<String, ArrayList<Case>> getCases(JunitResultXML caseXML) {
+		return XMLUnmarshal.getCasesMap(caseXML);
 	}
 
 	@JavaScriptMethod
-	public String saveComment(String commentPath, String comment) {
+	public void saveComment(String commentPath, String comment) {
 		System.out.println(commentPath + ":" + comment);
-		System.out.println("saveComment");
-		return "saveComment";
+		System.out.println("saveComment -- not completed yet");
 	}
 
 	public String getComment(String commentPath) {
-		System.out.println("getComment");
-		return "getComment";
+		return XMLUnmarshal.getComment(commentPath);
 	}
 
 	/**
