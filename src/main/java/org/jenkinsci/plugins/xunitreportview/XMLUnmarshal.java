@@ -98,7 +98,13 @@ public class XMLUnmarshal {
 	}
 
 	public static String getComment(String buildPath) {
-		return parseBuildXML(buildPath).getAction().get(0).getEntry().get(0).getString();
+		String comment = "";
+		try {
+			comment = parseBuildXML(buildPath).getAction().get(0).getEntry().get(0).getString();
+		} catch (Exception e) {
+			System.out.println("Failed to get comment from: " + buildPath);
+		}
+		return comment;
 	}
 
 	public static void main(String[] args) {
